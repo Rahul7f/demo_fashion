@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -121,7 +123,9 @@ Container productCard(Product product) {
 Container searchProductCard(Product product) {
   return Container(
     margin: const EdgeInsets.all(10),
+    padding: const EdgeInsets.all(10),
     width: double.infinity,
+
     decoration: BoxDecoration(
       color: Colors.white,
       boxShadow: [
@@ -134,58 +138,101 @@ Container searchProductCard(Product product) {
       ],
       borderRadius: BorderRadius.circular(10),
     ),
-    child: Row(
+    child: Column (
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-          child: Image.network(
-            "${product.looksImageUrl ?? "https://assets.ajio.com/medias/sys_master/root/20230703/0tQU/64a2db8ca9b42d15c930f5d8/-473Wx593H-420434297-blue-MODEL.jpg"}",
-            height: 70,
-            width: 70,
-            fit: BoxFit.cover,
-          ),
-        ),
-        const SizedBox(
-          width: 15,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "${product.name}",
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+
+          children: [
+            Expanded(
+              flex: 1,
+              child: ClipRRect(
+                borderRadius:  BorderRadius.circular(10),
+                child: Image.network(
+                  "${product.looksImageUrl ?? "https://assets.ajio.com/medias/sys_master/root/20230703/0tQU/64a2db8ca9b42d15c930f5d8/-473Wx593H-420434297-blue-MODEL.jpg"}",
+                  height: 100,
+                  width: 100,
+                  fit: BoxFit.cover,
+                ),
               ),
-              Text(
-                "${product.subCategory}",
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${product.name}",
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    Text(
+                      "${product.subCategory}",
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      "QR: ${product.qrCode}",
+                    ),
+                    Text(
+                      "OP: ${product.option}",
+                    ),
+                    const Text(
+                      "50% off",
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          actualPrice(product),
+                          style: const TextStyle(
+                              decoration: TextDecoration.lineThrough,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          discountPrice(product),
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14),
+                        ),
+                      ],
+                    ),
+
+                  ],
+                ),
               ),
-              const SizedBox(
-                height: 5,
-              ),
-              Wrap(
-                children: [
-                  sizeBox(),
-                  sizeBox(),
-                  sizeBox(),
-                  sizeBox(),
-                ],
-              )
-            ],
-          ),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+          ],
         ),
-        const SizedBox(
-          width: 5,
-        ),
+        const Text("Size:"),
+        Wrap(
+          children: product.ean?.keys.toList().map((e) => sizeBox(e)).toList() ?? [],
+        )
       ],
     ),
   );
 }
 
-Container sizeBox() {
+Container sizeBox(String e) {
   return Container(
     padding: const EdgeInsets.all(5),
     margin: const EdgeInsets.all(5),
@@ -195,7 +242,7 @@ Container sizeBox() {
       borderRadius: BorderRadius.circular(5),
     ),
     child: Text(
-      "38",
+      e,
     ),
   );
 }

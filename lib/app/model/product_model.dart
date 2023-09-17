@@ -137,7 +137,7 @@ class Product {
   @HiveField(49)
   double? likeabilty;
   @HiveField(50)
-  dynamic? brandRank;
+  String? brandRank;
   @HiveField(51)
   Map<String, String>? ean;
 
@@ -248,7 +248,7 @@ class Product {
     minimumArticleQuantity: json["MinimumArticleQuantity"],
     likeabilty: json["Likeabilty"]?.toDouble(),
     brandRank: json["BrandRank"],
-    ean: json["EAN"],
+    ean: (json['EAN'] as Map<String, dynamic>).map((key, value) {return MapEntry(key, value as String);}),
   );
 
   Map<String, dynamic> toJson() => {

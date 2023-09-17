@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../data/hive/product_hive.dart';
@@ -10,48 +12,36 @@ class SearchPageController extends GetxController {
   RxList<Product> searchedProduct = <Product>[].obs;
   RxInt productCount = 0.obs;
   RxString? searchQuery = "".obs; // The search query
+  TextEditingController searchController = TextEditingController();
 
   @override
   void onInit() {
-    checkInternet().then((value){
-      if(value){
-        fetchProduct();
-      }else{
-        fetchProductFromCache();
-      }
-    });
-    fetchProduct();
+    fetchProductFromCache();
     super.onInit();
   }
-
 
   @override
   void onClose() {
     super.onClose();
   }
 
-   searchProducts(List<Product> products, String? query) {
-    List<Product> result = [];
-    for (Product product in products) {
+   searchProducts(String? query) {
+    query = query?.toUpperCase();
+     searchedProduct.clear();
+     productCount.value = 0;
+     if(query == null || query.isEmpty || query.trim()==""){
+       return;
+     }
+    for (Product product in productList) {
       if (query == null ||
           (product.qrCode != null && product.qrCode!.contains(query)) ||
           (product.option != null && product.option!.contains(query))) {
-        result.add(product);
+        searchedProduct.add(product);
       }
     }
-    searchedProduct.value =  result;
+    productCount.value = searchedProduct.length;
   }
-  Future<void> fetchProduct() async {
-    ProductProvider productProvider = Get.find<ProductProvider>();
-    await productProvider.getProduct().then((value) async {
-      ProductModel data =  await ProductBox.putProduct(value);
-      printInfo(info: "fetchProduct: ${data.products?.length}");
-      productCount.value = data.products?.length??0;
-      productList.value = data.products??[];
-    }).catchError((onError){
-      printInfo(info: "fetchProduct Error:  ${onError.toString()}");
-    });
-  }
+
   Future<void> fetchProductFromCache() async {
     ProductModel data =  await ProductBox.getProduct();
     printInfo(info: "fetchProduct: ${data.products?.length}");

@@ -20,21 +20,29 @@ class SearchPageView extends GetView<SearchPageController> {
                 color: Colors.white, borderRadius: BorderRadius.circular(5)),
             child: Center(
               child: TextField(
+                onChanged: (value) {
+
+                  controller.searchProducts(value);
+                },
                 decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.clear),
                       onPressed: () {
-                        /* Clear the search field */
+                       controller.searchController.clear();
+                       controller.searchProducts("");
                       },
                     ),
                     hintText: 'Search...',
                     border: InputBorder.none),
+                controller: controller.searchController,
               ),
             ),
-          )),
+          ),
+        backgroundColor: Colors.red,
+      ),
       body: Obx(() => controller.productCount.value == 0
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: Text( "No data found.\nPlease enter a search query in the search box to search.",textAlign: TextAlign.center,))
           : Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Center(
@@ -46,7 +54,7 @@ class SearchPageView extends GetView<SearchPageController> {
                       height: 10,
                     ),
                     Text(
-                      'Total Products: ${controller.productCount}',
+                      'Total Item Found: ${controller.productCount}',
                     ),
                     const SizedBox(
                       height: 10,
@@ -54,7 +62,7 @@ class SearchPageView extends GetView<SearchPageController> {
                     Expanded(
                       child: ListView.builder(
                         itemCount: controller.productCount.value,
-                        itemBuilder: (context, index) => searchProductCard(controller.productList[index]),),
+                        itemBuilder: (context, index) => searchProductCard(controller.searchedProduct[index]),),
                     ),
                   ]),
             ),

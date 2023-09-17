@@ -105,13 +105,14 @@ class ProductAdapter extends TypeAdapter<Product> {
       minimumArticleQuantity: fields[48] as num?,
       likeabilty: fields[49] as double?,
       brandRank: fields[50] as String?,
+      ean: (fields[51] as Map?)?.cast<String, String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(51)
+      ..writeByte(52)
       ..writeByte(0)
       ..write(obj.season)
       ..writeByte(1)
@@ -213,7 +214,9 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..writeByte(49)
       ..write(obj.likeabilty)
       ..writeByte(50)
-      ..write(obj.brandRank);
+      ..write(obj.brandRank)
+      ..writeByte(51)
+      ..write(obj.ean);
   }
 
   @override
