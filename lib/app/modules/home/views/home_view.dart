@@ -25,12 +25,10 @@ class HomeView extends GetView<HomeController> {
               icon: const Icon(Icons.search))
         ],
       ),
-      body: Obx(() => controller.productCount.value == 0
+      body: Obx(() => controller.status.value == 0
           ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
+          : controller.status.value == 1?RefreshIndicator(
               onRefresh: () async {
-                controller.productList.value = [];
-                controller.productCount.value = 0;
                 controller.fetchProduct();
               },
               child: Padding(
@@ -64,7 +62,17 @@ class HomeView extends GetView<HomeController> {
                       ]),
                 ),
               ),
-            )),
+            ): Center(child: Column(
+        mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("${controller.message}",textAlign: TextAlign.center,),
+                const SizedBox(height: 10,),
+                ElevatedButton(onPressed: () {
+                  controller.fetchProduct();
+                }, child: const Text("Retry"))
+
+              ]
+            )))
     );
   }
 }
