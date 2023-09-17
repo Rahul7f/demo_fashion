@@ -28,7 +28,6 @@ InkWell productCard(Product product) {
       final ProductController productController = Get.put(ProductController());
       productController.setProduct(product);
       Get.toNamed(Routes.PRODUCT);
-
     },
     child: Container(
       margin: const EdgeInsets.all(10),
@@ -52,7 +51,7 @@ InkWell productCard(Product product) {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10), topRight: Radius.circular(10)),
             child: Image.network(
-              "${product.looksImageUrl ?? "https://assets.ajio.com/medias/sys_master/root/20230703/0tQU/64a2db8ca9b42d15c930f5d8/-473Wx593H-420434297-blue-MODEL.jpg"}",
+              "${product.looksImageUrl ?? sampleImage}",
               height: 200,
               width: double.maxFinite,
               fit: BoxFit.cover,
@@ -169,7 +168,7 @@ InkWell searchProductCard(Product product) {
                 child: ClipRRect(
                   borderRadius:  BorderRadius.circular(10),
                   child: Image.network(
-                    "${product.looksImageUrl ?? "https://assets.ajio.com/medias/sys_master/root/20230703/0tQU/64a2db8ca9b42d15c930f5d8/-473Wx593H-420434297-blue-MODEL.jpg"}",
+                    "${product.looksImageUrl ?? sampleImage}",
                     height: 100,
                     width: 100,
                     fit: BoxFit.cover,

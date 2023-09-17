@@ -30,7 +30,8 @@ class ProductView extends GetView<ProductController> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Stack(
                 children: [
-                  Image.network(sampleImage,
+
+                  Image.network( "${controller.product.value?.looksImageUrl ?? sampleImage}",
                       height: 500, width: double.infinity, fit: BoxFit.cover),
                   Positioned.fill(
                     child: Align(
@@ -177,6 +178,18 @@ class ProductView extends GetView<ProductController> {
 
 
                         ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text("Similar Products",style: TextStyle(fontWeight: FontWeight.bold),),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      StaggeredGrid.count(
+                        crossAxisCount: 2,
+
+                        children: controller.productList.map((e) => productCard(e)).toList().sublist(0, 10),
                       )
                     ]),
               )
