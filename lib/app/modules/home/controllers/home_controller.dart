@@ -66,6 +66,9 @@ class HomeController extends GetxController  {
     if(productList.isEmpty){
       status.value = 2;
       message.value = "Data not found";
+    }else{
+      status.value = 1;
+      message.value = "SUCCESS";
     }
   }
 
