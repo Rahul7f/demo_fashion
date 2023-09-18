@@ -23,7 +23,6 @@ class HomeController extends GetxController  {
         fetchProductFromCache();
       }
     });
-    fetchProduct();
     super.onInit();
   }
 
